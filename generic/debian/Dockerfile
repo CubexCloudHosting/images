@@ -12,9 +12,9 @@
     # Step 1: Add the container user
     RUN useradd -m -d /home/container -s /bin/bash container
     
-    # Step 2: Run apt update and install essential packages
-    RUN apt update && apt upgrade -y \
-        && apt install -y --no-install-recommends \
+    # Step 2: Run apt-get update and install essential packages
+    RUN apt-get update && apt-get upgrade -y \
+        && apt-get install -y --no-install-recommends \
             gcc g++ libgcc1 libssl-dev sqlite3 locales tzdata \
             wget curl tar zip unzip git jq ca-certificates
     
@@ -24,7 +24,7 @@
         && update-locale LANG=en_US.UTF-8
     
     # Step 4: Clean up apt cache and temporary files
-    RUN apt clean \
+    RUN apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
     # Set environment variables
@@ -38,4 +38,5 @@
     
     # Set entrypoint
     CMD ["/bin/bash", "/entrypoint.sh"]
+    
     
