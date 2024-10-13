@@ -25,11 +25,11 @@ RUN apk update \
         zip \
         unzip \
         ca-certificates \
-        libssl1.1 \
+        libssl3 \
         sqlite-dev \
         tzdata \
         libpng \
-        libjpeg \
+        libjpeg-turbo \
         zlib \
         gcc \
         g++ \
@@ -37,10 +37,10 @@ RUN apk update \
         autoconf \
         automake \
         cmake \
-        pkg-config \
+        pkgconf \
         re2c \
         bzip2 \
-        libtool-bin
+        libtool
 
 # Set working directory
 WORKDIR /home/container
