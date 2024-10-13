@@ -18,15 +18,18 @@ RUN adduser -D -h /home/container -s /bin/bash container
 # Install necessary packages
 RUN apk update \
     && apk add --no-cache \
-        libssl1.1 \
-        libsqlite3 \
+        openssl \
+        sqlite-dev \
         tzdata \
         wget \
         curl \
         tar \
         bash \
         jq \
-        ca-certificates
+        ca-certificates \
+        zlib \
+        libpng \
+        libjpeg
 
 # Set working directory
 WORKDIR /home/container
