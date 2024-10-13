@@ -9,7 +9,6 @@ FROM alpine:latest
 LABEL author="Cubex Hosting" maintainer="admin@cubex.cc"
 
 # Set environment variables
-ENV DEBIAN_FRONTEND=noninteractive
 ENV USER=container HOME=/home/container
 
 # Add container user
@@ -18,18 +17,30 @@ RUN adduser -D -h /home/container -s /bin/bash container
 # Install necessary packages
 RUN apk update \
     && apk add --no-cache \
-        openssl \
+        bash \
+        curl \
+        wget \
+        jq \
+        tar \
+        zip \
+        unzip \
+        ca-certificates \
+        libssl1.1 \
         sqlite-dev \
         tzdata \
-        wget \
-        curl \
-        tar \
-        bash \
-        jq \
-        ca-certificates \
-        zlib \
         libpng \
-        libjpeg
+        libjpeg \
+        zlib \
+        gcc \
+        g++ \
+        make \
+        autoconf \
+        automake \
+        cmake \
+        pkg-config \
+        re2c \
+        bzip2 \
+        libtool-bin
 
 # Set working directory
 WORKDIR /home/container
