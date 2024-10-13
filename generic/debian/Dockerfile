@@ -1,30 +1,35 @@
 # ----------------------------------
-# Cubex Hosting Custom Image
-# Image: ghcr.io/cubexhosting/images:generic-debian
+# Cubex Hosting Custom Image for PocketMine-MP
+# Base Image: ghcr.io/cubexhosting/images:generic-debian
 # ----------------------------------
 
-    FROM debian:bullseye-slim
+    FROM debian:bookworm-slim
 
     LABEL author="Cubex Hosting" maintainer="admin@cubex.cc"
     
-    ENV DEBIAN_FRONTEND noninteractive
+    ENV DEBIAN_FRONTEND=noninteractive
     
-    RUN useradd -m -d /home/container -s /bin/bash container
+    # Add the container user and set environment variables
+    RUN useradd -m -d /home/container -s /bin/bash container \
+        && ln -s /home/container /nonexistent \
+        && apt update && apt upgrade -y \
+        && apt install -y --no-install-recommends \
+            gcc g++ libgcc1 libssl-dev sqlite3 locales tzdata \
+            wget curl tar zip unzip git jq ca-certificates \
+        # Set the locale and clean up apt cache to reduce image size
+        && update-locale LANG=en_US.UTF-8 \
+        && apt clean \
+        && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
-    RUN ln -s /home/container/ /nonexistent
-    
+    # Set environment variables
     ENV USER=container HOME=/home/container
     
-    RUN apt update \
-     && apt upgrade -y
-    
-    RUN apt install -y gcc g++ libgcc1 libc++-dev gdb libc6 git wget curl tar zip unzip binutils xz-utils liblzo2-2 cabextract iproute2 net-tools netcat telnet libatomic1 libsdl1.2debian libsdl2-2.0-0 jq \
-        libfontconfig icu-devtools libunwind8 libssl-dev sqlite3 libsqlite3-dev locales ffmpeg gnupg2 apt-transport-https software-properties-common ca-certificates tzdata
-    
-    RUN update-locale lang=en_US.UTF-8 \
-     && dpkg-reconfigure --frontend noninteractive locales
-    
+    # Set working directory
     WORKDIR /home/container
     
+    # Copy entrypoint script
     COPY ./entrypoint.sh /entrypoint.sh
+    
+    # Set entrypoint
     CMD ["/bin/bash", "/entrypoint.sh"]
+    
