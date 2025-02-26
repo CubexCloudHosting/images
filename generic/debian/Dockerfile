@@ -1,11 +1,11 @@
 # ----------------------------------
-# Cubex Hosting Custom Image for PocketMine-MP
+# Cubex Cloud Hosting Custom Image for PocketMine-MP
 # Base Image: ghcr.io/cubexhosting/images:generic-debian
 # ----------------------------------
 
     FROM debian:bookworm-slim
 
-    LABEL author="Cubex Hosting" maintainer="admin@cubex.cc"
+    LABEL author="Cubex Cloud Hosting" maintainer="admin@cubex.cc"
     
     ENV DEBIAN_FRONTEND=noninteractive
     
