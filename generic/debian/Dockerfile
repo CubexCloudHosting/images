@@ -1,6 +1,6 @@
 # ----------------------------------
 # Cubex Cloud Hosting Custom Image for PocketMine-MP
-# Base Image: ghcr.io/cubexhosting/images:generic-debian
+# Base Image: ghcr.io/cubexcloudhosting/images:generic-debian
 # ----------------------------------
 
     FROM debian:bookworm-slim
@@ -12,7 +12,7 @@
     # Step 1: Add the container user
     RUN useradd -m -d /home/container -s /bin/bash container
     
-    # Step 2: Run apt-get update and install essential packages (including iproute2)
+    # Step 2: Run apt-get update and install essential packages
     RUN apt-get update && apt-get upgrade -y \
         && apt-get install -y --no-install-recommends \
             gcc g++ libgcc1 libssl-dev sqlite3 locales tzdata \

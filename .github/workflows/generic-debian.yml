@@ -31,4 +31,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/cubexhosting/images:generic-debian
+            ghcr.io/cubexcloudhosting/images:generic-debian
