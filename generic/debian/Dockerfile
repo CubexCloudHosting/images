@@ -30,26 +30,17 @@ RUN apt-get update && apt-get upgrade -y \
     && update-locale LANG=en_US.UTF-8 \
     && useradd -m -d /home/container -s /bin/bash container \
     && mkdir -p /mnt/install /mnt/server \
-    && chmod 755 /mnt/install /mnt/server \
+    && chown -R container:container /mnt \
     && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*
 
 WORKDIR /home/container
 
-# Copy entrypoint script
-COPY ./entrypoint.sh /entrypoint.sh
+# Copy and set permissions for entrypoint in single layer
+COPY --chown=container:container ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 USER container
 
-RUN echo '  if [ -d "/mnt/install" ]; then' >> /usr/local/bin/fix-perms-and-run.sh \
-    && echo '    find /mnt/install -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null || true' >> /usr/local/bin/fix-perms-and-run.sh \
-    && echo '  fi' >> /usr/local/bin/fix-perms-and-run.sh \
-    && echo '  exec gosu container /entrypoint.sh "$@"' >> /usr/local/bin/fix-perms-and-run.sh \
-    && echo 'else' >> /usr/local/bin/fix-perms-and-run.sh \
-    && echo '  exec /entrypoint.sh "$@"' >> /usr/local/bin/fix-perms-and-run.sh \
-    && echo 'fi' >> /usr/local/bin/fix-perms-and-run.sh \
-    && chmod +x /usr/local/bin/fix-perms-and-run.sh
-
-CMD ["/usr/local/bin/fix-perms-and-run.sh"]
+CMD ["/bin/bash", "/entrypoint.sh"]
