@@ -41,10 +41,9 @@ WORKDIR /home/container
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Create the fix-perms-and-run script before switching users
-RUN echo '#!/bin/bash' > /usr/local/bin/fix-perms-and-run.sh \
-    && echo 'if [ "$(id -u)" = "0" ]; then' >> /usr/local/bin/fix-perms-and-run.sh \
-    && echo '  if [ -d /mnt/install ]; then' >> /usr/local/bin/fix-perms-and-run.sh \
+USER container
+
+RUN echo '  if [ -d "/mnt/install" ]; then' >> /usr/local/bin/fix-perms-and-run.sh \
     && echo '    find /mnt/install -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null || true' >> /usr/local/bin/fix-perms-and-run.sh \
     && echo '  fi' >> /usr/local/bin/fix-perms-and-run.sh \
     && echo '  exec gosu container /entrypoint.sh "$@"' >> /usr/local/bin/fix-perms-and-run.sh \
@@ -52,7 +51,5 @@ RUN echo '#!/bin/bash' > /usr/local/bin/fix-perms-and-run.sh \
     && echo '  exec /entrypoint.sh "$@"' >> /usr/local/bin/fix-perms-and-run.sh \
     && echo 'fi' >> /usr/local/bin/fix-perms-and-run.sh \
     && chmod +x /usr/local/bin/fix-perms-and-run.sh
-
-USER container
 
 CMD ["/usr/local/bin/fix-perms-and-run.sh"]
