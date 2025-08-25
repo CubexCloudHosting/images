@@ -24,12 +24,13 @@ RUN apt-get update && apt-get upgrade -y \
         iproute2 \
         locales \
         tzdata \
+        jq \
     && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
     && locale-gen \
     && update-locale LANG=en_US.UTF-8 \
     && useradd -m -d /home/container -s /bin/bash container \
-    && mkdir -p /mnt/install \
-    && chown -R container:container /mnt/install \
+    && mkdir -p /mnt/install /mnt/server \
+    && chown -R container:container /mnt \
     && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*
